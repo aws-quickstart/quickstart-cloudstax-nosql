@@ -1,37 +1,22 @@
 {
   "AWSTemplateFormatVersion":"2010-09-09",
-  "Description": "This template creates an AWS ECS cluster and the Cassandra Cluster Service in an existing VPC. The application runs on CassandraAccessSecurityGroup and the same VPC to access Cassandra.",
+  "Description": "This template creates the Lambda function that creates and deletes the Cassandra service.",
   "Parameters":{
     "ServiceSecurityGroupID": {
       "Type": "AWS::EC2::SecurityGroup::Id",
       "Description": "The SecurityGroup to access the cluster nodes."
     },
-    "VPCID":{
-      "Type":"AWS::EC2::VPC::Id",
-      "Description":"Select a VPC that allows instances to access the Internet."
-    },
     "SubnetIDs": {
       "Type": "List<AWS::EC2::Subnet::Id>",
-      "Description": "The existing subnets in your VPC where you want to deploy node(s). Please make sure the Subnets match the AvailabilityZones.",
+      "Description": "The existing subnet to run Lambda function. This should be the subnet in the VPC where the Cassandra nodes are deployed.",
       "AllowedPattern": "subnet-[0-9a-z]{8}"
     },
-    "AvailabilityZones": {
-      "Type": "List<AWS::EC2::AvailabilityZone::Name>",
-      "Description": "The Availability Zones for the Subnets. Please make sure the AvailabilityZones match the Subnets, or else the cluster will not work."
-    },
-    "LambdaSubnetCIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-      "Type": "String",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
-      "Description": "The Subnet CIDR to run the Cassandra creation Lambda function."
-    },
-
     "QSS3BucketName": {
       "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
-      "Default": "qscloudstax",
+      "Default": "quickstart-reference",
       "Type": "String",
       "ConstraintDescription": "The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-      "Description": "S3 bucket name for the Quick Start. The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
+      "Description": "S3 bucket name for the CloudFormation templates. The CloudFormation template bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
     },
     "QSS3KeyPrefix": {
       "AllowedPattern": "^[0-9a-zA-Z-/]*$",
@@ -39,6 +24,14 @@
       "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
       "Default": "cloudstax/cassandra/latest/",
       "Type": "String"
+    },
+    "S3ObjectLambdaZip": {
+      "Type": "String",
+      "Default": "functions/packages/ServiceCreation/lambda.zip",
+      "AllowedValues": [
+        "functions/packages/ServiceCreation/lambda.zip"
+      ],
+      "Description": "The Cassandra lambda zip object"
     },
     "DeleteVolume": {
       "Type": "String",
@@ -51,7 +44,7 @@
     },
     "ClusterName":{
       "Type":"String",
-      "Description":"Name of the cluster.",
+      "Description":"The Cluster Name",
       "MinLength": "1",
       "MaxLength": "255",
       "AllowedPattern": "[a-zA-Z][a-zA-Z0-9-]*",
@@ -141,12 +134,12 @@
     }
   },
   "Resources":{
-    "CassandraLambdaSubnet": {
+    "CommonLambdaStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": {
           "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp-existingvpc-lambdanet.template",
+            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp-lambda-common.template",
             {
               "QSS3Region": {
                 "Fn::If": [
@@ -159,99 +152,8 @@
           ]
         },
         "Parameters": {
-          "VPCID": {
-            "Ref": "VPCID"
-          },
-          "SubnetIDs": {
-            "Fn::Join": [
-              ",",
-              {
-                "Ref": "SubnetIDs"
-              }
-            ]
-          },
-          "AvailabilityZones": {
-            "Fn::Join": [
-              ",",
-              {
-                "Ref": "AvailabilityZones"
-              }
-            ]
-          },
-          "LambdaSubnetCIDR": {
-            "Ref": "LambdaSubnetCIDR"
-          },
-          "NameTag": {
-            "Fn::Join": [
-              "-",
-              [
-                {
-                  "Ref": "ClusterName"
-                },
-                "cassandra-lambda"
-              ]
-            ]
-          }
-        }
-      }
-    },
-
-    "CassandraLambda": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/cassandra-lambda.template",
-            {
-              "QSS3Region": {
-                "Fn::If": [
-                  "GovCloudCondition",
-                  "s3-us-gov-west-1",
-                  "s3"
-                ]
-              }
-            }
-          ]
-        },
-        "Parameters": {
-          "DeleteVolume": {
-            "Ref": "DeleteVolume"
-          },
           "ClusterName": {
             "Ref": "ClusterName"
-          },
-          "ServiceName": {
-            "Ref": "ServiceName"
-          },
-          "Replicas": {
-            "Ref": "Replicas"
-          },
-          "HeapSizeMB": {
-            "Ref": "HeapSizeMB"
-          },
-          "VolumeType": {
-            "Ref": "VolumeType"
-          },
-          "Iops": {
-            "Ref": "Iops"
-          },
-          "VolumeSizeGB": {
-            "Ref": "VolumeSizeGB"
-          },
-          "JournalVolumeType": {
-            "Ref": "JournalVolumeType"
-          },
-          "JournalIops": {
-            "Ref": "JournalIops"
-          },
-          "JournalVolumeSizeGB": {
-            "Ref": "JournalVolumeSizeGB"
-          },
-          "JmxRemoteUser": {
-            "Ref": "JmxRemoteUser"
-          },
-          "JmxRemotePassword": {
-            "Ref": "JmxRemotePassword"
           },
           "QSS3BucketName": {
             "Ref": "QSS3BucketName"
@@ -259,15 +161,137 @@
           "QSS3KeyPrefix": {
             "Ref": "QSS3KeyPrefix"
           },
-          "ServiceSecurityGroupID": {
+          "S3ObjectLambdaZip": {
+            "Ref": "S3ObjectLambdaZip"
+          }
+        }
+      }
+    },
+    "VPCDestroyENI": {
+      "Type": "Custom::VPCDestroyENI",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CommonLambdaStack",
+            "Outputs.VPCDestroyENIFunctionArn"
+          ]
+        },
+        "SecurityGroups": [
+          {
             "Ref": "ServiceSecurityGroupID"
-          },
-          "SubnetIDs": {
+          }
+        ]
+      }
+    },
+
+    "LambdaFunction" : {
+      "Type" : "AWS::Lambda::Function",
+      "Properties" : {
+        "Code": {
+          "S3Bucket": {
             "Fn::GetAtt": [
-              "CassandraLambdaSubnet",
-              "Outputs.LambdaSubnet"
+              "CommonLambdaStack",
+              "Outputs.DestBucket"
+            ]
+          },
+          "S3Key": {
+            "Fn::GetAtt": [
+              "CommonLambdaStack",
+              "Outputs.LambdaDestObject"
             ]
           }
+        },
+        "Runtime" : "python3.6",
+        "Role" : {
+          "Fn::GetAtt" : [
+            "CommonLambdaStack",
+            "Outputs.LambdaExecutionRoleArn"
+          ]
+        },
+        "Timeout" : "300",
+        "Handler" : "setup.lambda_handler",
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            {
+              "Ref": "ServiceSecurityGroupID"
+            }
+          ],
+          "SubnetIds": {
+            "Ref": "SubnetIDs"
+          }
+        }
+      }
+    },
+    "LambdaFunctionLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "DependsOn": "LambdaFunction",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "LogGroupName": {
+          "Fn::Join": [
+            "/",
+            [
+              {"Ref": "ClusterName"},
+              "aws/lambda",
+              {"Ref": "LambdaFunction"}
+            ]
+          ]
+        },
+        "RetentionInDays": 30
+      }
+    },
+
+    "LambdaCustomResource" : {
+      "Type" : "Custom::CassandraLambdaCustomResource",
+      "DependsOn": "VPCDestroyENI",
+      "Properties" : {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "LambdaFunction",
+            "Arn"
+          ]
+        },
+        "Region": {
+          "Ref": "AWS::Region"
+        },
+        "DeleteVolume": {
+          "Ref": "DeleteVolume"
+        },
+        "Cluster":{
+          "Ref": "ClusterName"
+        },
+        "ServiceName": {
+          "Ref": "ServiceName"
+        },
+        "Replicas": {
+          "Ref": "Replicas"
+        },
+        "HeapSizeMB": {
+          "Ref": "HeapSizeMB"
+        },
+        "VolumeType": {
+          "Ref": "VolumeType"
+        },
+        "Iops": {
+          "Ref": "Iops"
+        },
+        "VolumeSizeGB": {
+          "Ref": "VolumeSizeGB"
+        },
+        "JournalVolumeType": {
+          "Ref": "JournalVolumeType"
+        },
+        "JournalIops": {
+          "Ref": "JournalIops"
+        },
+        "JournalVolumeSizeGB": {
+          "Ref": "JournalVolumeSizeGB"
+        },
+        "JmxRemoteUser": {
+          "Ref": "JmxRemoteUser"
+        },
+        "JmxRemotePassword": {
+          "Ref": "JmxRemotePassword"
         }
       }
     }
