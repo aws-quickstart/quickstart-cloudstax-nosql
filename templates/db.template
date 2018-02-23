@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion":"2010-09-09",
-  "Description": "This template creates an AWS ECS cluster and the Apache Cassandra Cluster Service in an existing VPC. The application runs on CassandraAccessSecurityGroup and the same VPC to access Apache Cassandra.",
+  "Description": "This template creates an AWS ECS cluster and the Apache Cassandra Cluster Service in an existing VPC. The application runs on CassandraAccessSecurityGroup and the same VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) Feb,19,2018 (qs-1o6j92eae)",
   "Metadata": {
     "AWS::CloudFormation::Interface": {
       "ParameterGroups": [
@@ -529,7 +529,7 @@
       "Properties": {
         "TemplateURL": {
           "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp.template",
+            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp-common.template",
             {
               "QSS3Region": {
                 "Fn::If": [

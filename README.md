@@ -14,5 +14,5 @@ Deploying CloudStax NoSQL DB on AWS enhances the reliability of using Cassandra 
 
 The AWS CloudFormation templates included with the Quick Start automate the following:
 
-- Deploying Redis into a new VPC
-- Deploying Redis into an existing VPC
+- Deploying Cassandra into a new VPC
+- Deploying Cassandra into an existing VPC
