@@ -1,0 +1,46 @@
+[
+  {
+    "ParameterKey": "DeleteVolume",
+    "ParameterValue": "true"
+  },
+  {
+    "ParameterKey": "ClusterName",
+    "ParameterValue": "$[taskcat_random-string]"
+  },
+  {
+    "ParameterKey": "AvailabilityZones",
+    "ParameterValue": "$[alfred_genaz_2]"
+  },
+  {
+    "ParameterKey": "NumberOfAZs",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "NumberOfNodes",
+    "ParameterValue": "3"
+  },
+  {
+    "ParameterKey": "KeyPairName",
+    "ParameterValue": "cikey"
+  },
+  {
+    "ParameterKey": "RemoteAccessCIDR",
+    "ParameterValue": "10.0.0.0/16"
+  },
+  {
+    "ParameterKey": "NodeInstanceType",
+    "ParameterValue": "t2.micro"
+  },
+  {
+    "ParameterKey": "ServiceName",
+    "ParameterValue": "mycas"
+  },
+  {
+    "ParameterKey": "Replicas",
+    "ParameterValue": "3"
+  },
+  {
+    "ParameterKey": "HeapSizeMB",
+    "ParameterValue": "512"
+  }
+]
