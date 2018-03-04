@@ -88,6 +88,15 @@
       "Default": "400",
       "Description": "The Data volume size"
     },
+    "EncryptVolume": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Whether encrypts the Data volume"
+    },
     "JournalVolumeType": {
       "Type": "String",
       "Default": "gp2",
@@ -108,9 +117,18 @@
       "Default": "20",
       "Description": "The Journal volume size"
     },
+    "EncryptJournalVolume": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Whether encrypts the Journal volume"
+    },
     "JmxRemoteUser": {
       "Type": "String",
-      "Default": "cassandrajmx",
+      "Default": "jmxuser",
       "MaxLength": "255",
       "Description": "The Cassandra JMX Remote User"
     },
@@ -278,6 +296,9 @@
         "VolumeSizeGB": {
           "Ref": "VolumeSizeGB"
         },
+        "EncryptVolume": {
+          "Ref": "EncryptVolume"
+        },
         "JournalVolumeType": {
           "Ref": "JournalVolumeType"
         },
@@ -286,6 +307,9 @@
         },
         "JournalVolumeSizeGB": {
           "Ref": "JournalVolumeSizeGB"
+        },
+        "EncryptJournalVolume": {
+          "Ref": "EncryptJournalVolume"
         },
         "JmxRemoteUser": {
           "Ref": "JmxRemoteUser"

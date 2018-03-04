@@ -61,9 +61,11 @@
             "VolumeType",
             "Iops",
             "VolumeSizeGB",
+            "EncryptVolume",
             "JournalVolumeType",
             "JournalIops",
             "JournalVolumeSizeGB",
+            "EncryptJournalVolume",
             "JmxRemoteUser",
             "JmxRemotePassword"
           ]
@@ -146,6 +148,9 @@
         "VolumeSizeGB": {
           "default": "Data Volume Size GB"
         },
+        "EncryptVolume": {
+          "default": "Whether encrypts Data Volume"
+        },
         "JournalVolumeType": {
           "default": "Journal Volume Type"
         },
@@ -154,6 +159,9 @@
         },
         "JournalVolumeSizeGB": {
           "default": "Journal Volume Size GB"
+        },
+        "EncryptJournalVolume": {
+          "default": "Whether encrypts Journal Volume"
         },
         "JmxRemoteUser": {
           "default": "JMX Remote User"
@@ -232,8 +240,8 @@
 
     "FireCampRelease": {
       "Type": "String",
-      "Default": "0.9.3",
-      "AllowedValues": [ "0.9.3", "0.9.2" ],
+      "Default": "0.9.4",
+      "AllowedValues": [ "0.9.4", "0.9.3" ],
       "Description": "The FireCamp release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
     },
     "ClusterName":{
@@ -358,6 +366,15 @@
       "Default": "400",
       "Description": "The Data volume size"
     },
+    "EncryptVolume": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Whether encrypts the Data volume"
+    },
     "JournalVolumeType": {
       "Type": "String",
       "Default": "gp2",
@@ -378,9 +395,18 @@
       "Default": "20",
       "Description": "The Journal volume size"
     },
+    "EncryptJournalVolume": {
+      "Type": "String",
+      "Default": "false",
+      "AllowedValues": [
+        "false",
+        "true"
+      ],
+      "Description": "Whether encrypts the Journal volume"
+    },
     "JmxRemoteUser": {
       "Type": "String",
-      "Default": "cassandrajmx",
+      "Default": "jmxuser",
       "MaxLength": "255",
       "Description": "The Apache Cassandra JMX Remote User"
     },
@@ -389,7 +415,7 @@
       "Default": "jmxpassword",
       "NoEcho": "true",
       "MaxLength": "255",
-      "Description": "Enter your Apache Cassandra JMX Remote Password",
+      "Description": "Enter your Apache Cassandra JMX Remote Password, default: jmxpassword",
       "ConstraintDescription": "Input your Apache Cassandra JMX Remote Password"
     }
   },
