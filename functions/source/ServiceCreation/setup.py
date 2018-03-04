@@ -31,6 +31,13 @@ def lambda_handler(event, context):
         print(time.strftime('%Y-%m-%d %H:%M:%S'), manageserver, socket.gethostbyname(manageserver))
 
         if requestType == 'Create':
+            encryptVolume = False
+            if properties['EncryptVolume'] == "true":
+                encryptVolume = True
+            encryptJournalVolume = False
+            if properties['EncryptJournalVolume'] == "true":
+                encryptJournalVolume = True
+
             data = {
                 "Service": {
                     "Region": properties['Region'],
@@ -50,14 +57,16 @@ def lambda_handler(event, context):
                         "VolumeType": properties['VolumeType'],
                         "Iops": int(properties['Iops']),
                         "VolumeSizeGB": int(properties['VolumeSizeGB']),
+                        "Encrypted": encryptVolume
                     },
                     "JournalVolume": {
                         "VolumeType": properties['JournalVolumeType'],
                         "Iops": int(properties['JournalIops']),
                         "VolumeSizeGB": int(properties['JournalVolumeSizeGB']),
+                        "Encrypted": encryptJournalVolume
                     },
                     "JmxRemoteUser": properties['JmxRemoteUser'],
-                    "JmxRemotePassword": properties['JmxRemotePassword']
+                    "JmxRemotePasswd": properties['JmxRemotePassword']
                 }
             }
 
