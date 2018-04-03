@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "ClusterName",
-    "ParameterValue": "$[taskcat_random-string]"
+    "ParameterValue": "alfred-develop-$[alfred_genuuid]"
   },
   {
     "ParameterKey": "AvailabilityZones",
