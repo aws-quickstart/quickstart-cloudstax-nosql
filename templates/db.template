@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion":"2010-09-09",
-    "Description": "This template creates an AWS ECS cluster and the Apache Cassandra Cluster Service in an existing VPC. The application runs on CassandraAccessSecurityGroup and the same VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) Feb,19,2018 (qs-1o6j92eae)",
+    "Description": "This template creates an AWS ECS cluster and the Apache Cassandra Cluster Service in an existing VPC. The application runs on CassandraAccessSecurityGroup and the same VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) April,3,2018 (qs-1oap7luuq)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [

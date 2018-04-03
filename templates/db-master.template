@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template creates a new VPC, an AWS ECS cluster and a Apache Cassandra Cluster Service. The BastionSecurityGroup is the only one that is allowed to ssh to the cluster nodes. The application runs on CassandraAccessSecurityGroup and VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) Feb,19,2018 (qs-1o6j92ea9)",
+    "Description": "This template creates a new VPC, an AWS ECS cluster and a Apache Cassandra Cluster Service. The BastionSecurityGroup is the only one that is allowed to ssh to the cluster nodes. The application runs on CassandraAccessSecurityGroup and VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) April,3,2018 (qs-1oap7m000)",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
