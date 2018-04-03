@@ -1,5 +1,5 @@
 global:
-  qsname: quickstart-nosql-cassandra
+  qsname: quickstart-cloudstax-nosql
   owner: quickstart-eng@amazon.com
   reporting: true
   govcloud: false
