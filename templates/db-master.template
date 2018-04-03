@@ -1,1000 +1,1017 @@
 {
-  "AWSTemplateFormatVersion":"2010-09-09",
-  "Description": "This template creates a new VPC, an AWS ECS cluster and a Apache Cassandra Cluster Service. The BastionSecurityGroup is the only one that is allowed to ssh to the cluster nodes. The application runs on CassandraAccessSecurityGroup and VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) Feb,19,2018 (qs-1o6j92ea9)",
-  "Metadata": {
-    "AWS::CloudFormation::Interface": {
-      "ParameterGroups": [
-        {
-          "Label": {
-            "default": "Network Configuration"
-          },
-          "Parameters": [
-            "AvailabilityZones",
-            "NumberOfAZs",
-            "VPCCIDR",
-            "PrivateSubnet1CIDR",
-            "PrivateSubnet2CIDR",
-            "PrivateSubnet3CIDR",
-            "PublicSubnet1CIDR",
-            "PublicSubnet2CIDR",
-            "PublicSubnet3CIDR",
-            "RemoteAccessCIDR"
-          ]
-        },
-        {
-          "Label": {
-            "default": "Security Configuration"
-          },
-          "Parameters": [
-            "KeyPairName"
-          ]
-        },
-        {
-          "Label": {
-            "default": "Linux Bastion Amazon EC2 Configuration"
-          },
-          "Parameters": [
-            "BastionAMIOS",
-            "BastionInstanceType",
-            "NumBastionHosts"
-          ]
-        },
-        {
-          "Label": {
-            "default": "Cluster Configuration"
-          },
-          "Parameters": [
-            "ClusterName",
-            "FireCampRelease",
-            "NumberOfNodes",
-            "NodeAMIOS",
-            "NodeInstanceType",
-            "DeleteVolume"
-          ]
-        },
-        {
-          "Label": {
-            "default": "Apache Cassandra Service Configuration"
-          },
-          "Parameters": [
-            "CassandraRelease",
-            "ServiceName",
-            "Replicas",
-            "HeapSizeMB",
-            "VolumeType",
-            "Iops",
-            "VolumeSizeGB",
-            "EncryptVolume",
-            "JournalVolumeType",
-            "JournalIops",
-            "JournalVolumeSizeGB",
-            "EncryptJournalVolume",
-            "JmxRemoteUser",
-            "JmxRemotePassword"
-          ]
-        },
-        {
-          "Label": {
-            "default": "AWS Quick Start Configuration"
-          },
-          "Parameters": [
-            "QSS3BucketName",
-            "QSS3KeyPrefix"
-          ]
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "This template creates a new VPC, an AWS ECS cluster and a Apache Cassandra Cluster Service. The BastionSecurityGroup is the only one that is allowed to ssh to the cluster nodes. The application runs on CassandraAccessSecurityGroup and VPC to access Apache Cassandra. License: Apache 2.0 (Please do not remove) Feb,19,2018 (qs-1o6j92ea9)",
+    "Metadata": {
+        "AWS::CloudFormation::Interface": {
+            "ParameterGroups": [
+                {
+                    "Label": {
+                        "default": "Network Configuration"
+                    },
+                    "Parameters": [
+                        "AvailabilityZones",
+                        "NumberOfAZs",
+                        "VPCCIDR",
+                        "PrivateSubnet1CIDR",
+                        "PrivateSubnet2CIDR",
+                        "PrivateSubnet3CIDR",
+                        "PublicSubnet1CIDR",
+                        "PublicSubnet2CIDR",
+                        "PublicSubnet3CIDR",
+                        "RemoteAccessCIDR"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Security Configuration"
+                    },
+                    "Parameters": [
+                        "KeyPairName"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Linux Bastion Amazon EC2 Configuration"
+                    },
+                    "Parameters": [
+                        "BastionAMIOS",
+                        "BastionInstanceType",
+                        "NumBastionHosts"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Cluster Configuration"
+                    },
+                    "Parameters": [
+                        "ClusterName",
+                        "FireCampRelease",
+                        "NumberOfNodes",
+                        "NodeAMIOS",
+                        "NodeInstanceType",
+                        "DeleteVolume"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "Apache Cassandra Service Configuration"
+                    },
+                    "Parameters": [
+                        "CassandraRelease",
+                        "ServiceName",
+                        "Replicas",
+                        "HeapSizeMB",
+                        "VolumeType",
+                        "Iops",
+                        "VolumeSizeGB",
+                        "EncryptVolume",
+                        "JournalVolumeType",
+                        "JournalIops",
+                        "JournalVolumeSizeGB",
+                        "EncryptJournalVolume",
+                        "JmxRemoteUser",
+                        "JmxRemotePassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
+                    ]
+                }
+            ],
+            "ParameterLabels": {
+                "AvailabilityZones": {
+                    "default": "Availability Zones"
+                },
+                "NumberOfAZs": {
+                    "default": "Number of Availability Zones"
+                },
+                "VPCCIDR": {
+                    "default": "VPC CIDR"
+                },
+                "PrivateSubnet1CIDR": {
+                    "default": "Private Subnet 1 CIDR"
+                },
+                "PrivateSubnet2CIDR": {
+                    "default": "Private Subnet 2 CIDR"
+                },
+                "PrivateSubnet3CIDR": {
+                    "default": "Private Subnet 3 CIDR"
+                },
+                "PublicSubnet1CIDR": {
+                    "default": "Public Subnet 1 CIDR"
+                },
+                "PublicSubnet2CIDR": {
+                    "default": "Public Subnet 2 CIDR"
+                },
+                "PublicSubnet3CIDR": {
+                    "default": "Public Subnet 3 CIDR"
+                },
+                "RemoteAccessCIDR": {
+                    "default": "Allowed Bastion External Access CIDR"
+                },
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
+                "BastionAMIOS": {
+                    "default": "Bastion AMI Operating System"
+                },
+                "BastionInstanceType": {
+                    "default": "Bastion Instance Type"
+                },
+                "NumBastionHosts": {
+                    "default": "Number of Bastion Hosts"
+                },
+                "ClusterName": {
+                    "default": "Cluster Name"
+                },
+                "FireCampRelease": {
+                    "default": "CloudStax FireCamp Release Version"
+                },
+                "NumberOfNodes": {
+                    "default": "Number of Container Worker Nodes"
+                },
+                "NodeAMIOS": {
+                    "default": "Node AMI Type"
+                },
+                "NodeInstanceType": {
+                    "default": "Node Instance Type"
+                },
+                "DeleteVolume": {
+                    "default": "Delete EBS Volumes"
+                },
+                "CassandraRelease": {
+                    "default": "Apache Cassandra Release Version"
+                },
+                "ServiceName": {
+                    "default": "Service Name"
+                },
+                "Replicas": {
+                    "default": "Number of Replicas"
+                },
+                "HeapSizeMB": {
+                    "default": "Apache Cassandra JVM Heap Size MB"
+                },
+                "VolumeType": {
+                    "default": "Data Volume Type"
+                },
+                "Iops": {
+                    "default": "Data Volume Iops"
+                },
+                "VolumeSizeGB": {
+                    "default": "Data Volume Size GB"
+                },
+                "EncryptVolume": {
+                    "default": "Whether encrypts Data Volume"
+                },
+                "JournalVolumeType": {
+                    "default": "Journal Volume Type"
+                },
+                "JournalIops": {
+                    "default": "Journal Volume Iops"
+                },
+                "JournalVolumeSizeGB": {
+                    "default": "Journal Volume Size GB"
+                },
+                "EncryptJournalVolume": {
+                    "default": "Whether encrypts Journal Volume"
+                },
+                "JmxRemoteUser": {
+                    "default": "JMX Remote User"
+                },
+                "JmxRemotePassword": {
+                    "default": "JMX Remote Password"
+                },
+                "QSS3BucketName": {
+                    "default": "Quick Start S3 Bucket Name"
+                },
+                "QSS3KeyPrefix": {
+                    "default": "Quick Start S3 Key Prefix"
+                }
+            }
         }
-      ],
-      "ParameterLabels": {
+    },
+    "Parameters": {
         "AvailabilityZones": {
-          "default": "Availability Zones"
+            "Description": "List of Availability Zones to use for the subnets in the VPC. This MUST match the number of AvailabilityZones. Please use 3 AvailabilityZones for the production system.",
+            "Type": "List<AWS::EC2::AvailabilityZone::Name>"
         },
         "NumberOfAZs": {
-          "default": "Number of Availability Zones"
+            "AllowedValues": [
+                "2",
+                "3"
+            ],
+            "Description": "Number of Availability Zones to use in the VPC. This MUST match your selections in the list of Availability Zones parameter. Please use 3 AZs for the production system.",
+            "Default": "3",
+            "Type": "String"
         },
         "VPCCIDR": {
-          "default": "VPC CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "Default": "10.0.0.0/16",
+            "Type": "String",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Description": "CIDR Block for the VPC"
         },
         "PrivateSubnet1CIDR": {
-          "default": "Private Subnet 1 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.0.0/19",
+            "Description": "CIDR block for private subnet 1 located in Availability Zone 1.",
+            "Type": "String"
         },
         "PrivateSubnet2CIDR": {
-          "default": "Private Subnet 2 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.32.0/19",
+            "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
+            "Type": "String"
         },
         "PrivateSubnet3CIDR": {
-          "default": "Private Subnet 3 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.64.0/19",
+            "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
+            "Type": "String"
         },
         "PublicSubnet1CIDR": {
-          "default": "Public Subnet 1 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.128.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 1 located in Availability Zone 1",
+            "Type": "String"
         },
         "PublicSubnet2CIDR": {
-          "default": "Public Subnet 2 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.144.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
+            "Type": "String"
         },
         "PublicSubnet3CIDR": {
-          "default": "Public Subnet 3 CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
+            "Default": "10.0.160.0/20",
+            "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
+            "Type": "String"
         },
         "RemoteAccessCIDR": {
-          "default": "Allowed Bastion External Access CIDR"
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
+            "Type": "String",
+            "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
+            "Description": "Allowed CIDR block for external SSH access to the Bastion nodes. MUST be in the form x.x.x.x/x"
         },
-
         "KeyPairName": {
-          "default": "Key Pair Name"
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the Bastion and cluster nodes."
         },
-
         "BastionAMIOS": {
-          "default": "Bastion AMI Operating System"
+            "AllowedValues": [
+                "Amazon-Linux-HVM",
+                "CentOS-7-HVM",
+                "Ubuntu-Server-14.04-LTS-HVM",
+                "Ubuntu-Server-16.04-LTS-HVM"
+            ],
+            "Default": "Amazon-Linux-HVM",
+            "Description": "The Linux distribution for the AMI to be used for the bastion instances",
+            "Type": "String"
         },
         "BastionInstanceType": {
-          "default": "Bastion Instance Type"
+            "Default": "t2.micro",
+            "Type": "String",
+            "Description": "Amazon EC2 instance type for the second bastion instance",
+            "AllowedValues": [
+                "t2.nano",
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "t2.large",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge"
+            ]
         },
         "NumBastionHosts": {
-          "default": "Number of Bastion Hosts"
+            "AllowedValues": [
+                "1",
+                "2",
+                "3",
+                "4"
+            ],
+            "Default": "2",
+            "Description": "Enter the number of bastion hosts to create",
+            "Type": "String"
         },
-
         "ClusterName": {
-          "default": "Cluster Name"
-        },
-        "FireCampRelease": {
-          "default": "CloudStax FireCamp Release Version"
+            "Type": "String",
+            "Description": "Name of the ECS cluster. The cluster domain will be ClusterName-firecamp.com. Each label of the domain name can be up to 63 bytes long. The ClusterName can be up to 54 bytes.",
+            "MinLength": "1",
+            "MaxLength": "54",
+            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9-]*",
+            "ConstraintDescription": "Cluster name must start with a letter and can only contain letters, numbers, or hyphens."
         },
         "NumberOfNodes": {
-          "default": "Number of Container Worker Nodes"
+            "Type": "Number",
+            "Default": "3",
+            "Description": "Number of Nodes. This MUST match the total number of Apache Cassandra replicas."
         },
         "NodeAMIOS": {
-          "default": "Node AMI Type"
+            "AllowedValues": [
+                "Amazon-Linux-HVM"
+            ],
+            "Default": "Amazon-Linux-HVM",
+            "Description": "The Linux distribution for the AMI to be used for the service instances",
+            "Type": "String"
         },
         "NodeInstanceType": {
-          "default": "Node Instance Type"
+            "Description": "EC2 instance type",
+            "Type": "String",
+            "Default": "m4.2xlarge",
+            "AllowedValues": [
+                "t2.micro",
+                "t2.small",
+                "t2.medium",
+                "t2.large",
+                "t2.xlarge",
+                "t2.2xlarge",
+                "m3.medium",
+                "m3.large",
+                "m3.xlarge",
+                "m3.2xlarge",
+                "m4.large",
+                "m4.xlarge",
+                "m4.2xlarge",
+                "m4.4xlarge",
+                "m4.10xlarge",
+                "r3.large",
+                "r3.xlarge",
+                "r3.2xlarge",
+                "r3.4xlarge",
+                "r3.8xlarge",
+                "r4.large",
+                "r4.xlarge",
+                "r4.2xlarge",
+                "r4.4xlarge",
+                "r4.8xlarge",
+                "r4.16xlarge",
+                "c4.large",
+                "c4.xlarge",
+                "c4.2xlarge",
+                "c4.4xlarge",
+                "c4.8xlarge",
+                "c5.large",
+                "c5.xlarge",
+                "c5.2xlarge",
+                "c5.4xlarge",
+                "c5.9xlarge",
+                "c5.18xlarge"
+            ],
+            "ConstraintDescription": "Please choose a valid instance type."
         },
         "DeleteVolume": {
-          "default": "Delete EBS Volumes"
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "true",
+                "false"
+            ],
+            "Description": "Whether delete Apache Cassandra EBS volumes when deleting the stack"
         },
-
         "CassandraRelease": {
-          "default": "Apache Cassandra Release Version"
+            "Type": "String",
+            "Default": "3.11",
+            "AllowedValues": [
+                "3.11"
+            ],
+            "Description": "Apache Cassandra Release Version. For the detail release notes, please refer to http://cassandra.apache.org"
         },
         "ServiceName": {
-          "default": "Service Name"
+            "Type": "String",
+            "Description": "The Apache Cassandra Service Name. The service DNS name will be ServiceName-index.ClusterName-firecamp.com. Each label of the domain name can be up to 63 bytes long. Reserve 4 bytes for the index. The ServiceName can be up to 58 bytes.",
+            "MinLength": "1",
+            "MaxLength": "58",
+            "AllowedPattern": "[a-zA-Z][a-zA-Z0-9-]*",
+            "ConstraintDescription": "Service name must start with a letter and can only contain letters, numbers, or hyphens."
         },
         "Replicas": {
-          "default": "Number of Replicas"
+            "Type": "Number",
+            "Default": "3",
+            "Description": "Number of replicas"
         },
         "HeapSizeMB": {
-          "default": "Apache Cassandra JVM Heap Size MB"
+            "Type": "Number",
+            "Default": "8192",
+            "Description": "The Apache Cassandra JVM Heap Size MB"
         },
         "VolumeType": {
-          "default": "Data Volume Type"
+            "Type": "String",
+            "Default": "gp2",
+            "AllowedValues": [
+                "gp2",
+                "io1",
+                "st1"
+            ],
+            "Description": "The Data volume type"
         },
         "Iops": {
-          "default": "Data Volume Iops"
+            "Type": "Number",
+            "Default": 100,
+            "Description": "The iops of the data volume, valid for io1 type volume only."
         },
         "VolumeSizeGB": {
-          "default": "Data Volume Size GB"
+            "Type": "Number",
+            "Default": "400",
+            "Description": "The Data volume size"
         },
         "EncryptVolume": {
-          "default": "Whether encrypts Data Volume"
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "false",
+                "true"
+            ],
+            "Description": "Whether encrypts the Data volume"
         },
         "JournalVolumeType": {
-          "default": "Journal Volume Type"
+            "Type": "String",
+            "Default": "gp2",
+            "AllowedValues": [
+                "gp2",
+                "io1",
+                "st1"
+            ],
+            "Description": "The Journal volume type"
         },
         "JournalIops": {
-          "default": "Journal Volume Iops"
+            "Type": "Number",
+            "Default": 100,
+            "Description": "The iops of the journal volume, valid for io1 type volume only."
         },
         "JournalVolumeSizeGB": {
-          "default": "Journal Volume Size GB"
+            "Type": "Number",
+            "Default": "20",
+            "Description": "The Journal volume size"
         },
         "EncryptJournalVolume": {
-          "default": "Whether encrypts Journal Volume"
+            "Type": "String",
+            "Default": "false",
+            "AllowedValues": [
+                "false",
+                "true"
+            ],
+            "Description": "Whether encrypts the Journal volume"
         },
         "JmxRemoteUser": {
-          "default": "JMX Remote User"
+            "Type": "String",
+            "Default": "jmxuser",
+            "MaxLength": "255",
+            "Description": "The Apache Cassandra JMX Remote User"
         },
         "JmxRemotePassword": {
-          "default": "JMX Remote Password"
+            "Type": "String",
+            "Default": "jmxpassword",
+            "NoEcho": "true",
+            "MaxLength": "255",
+            "Description": "Enter your Apache Cassandra JMX Remote Password, default: jmxpassword",
+            "ConstraintDescription": "Input your Apache Cassandra JMX Remote Password"
         },
-
+        "FireCampRelease": {
+            "Type": "String",
+            "Default": "0.9.4",
+            "AllowedValues": [
+                "0.9.4",
+                "0.9.3"
+            ],
+            "Description": "The FireCamp release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
+        },
         "QSS3BucketName": {
-          "default": "Quick Start S3 Bucket Name"
+            "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
+            "Default": "quickstart-reference",
+            "Type": "String",
+            "ConstraintDescription": "The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
+            "Description": "S3 bucket name for the Quick Start assets. The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
         },
         "QSS3KeyPrefix": {
-          "default": "Quick Start S3 Key Prefix"
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "cloudstax/cassandra/latest/",
+            "Type": "String"
         }
-      }
-    }
-  },
-  "Parameters":{
-    "AvailabilityZones": {
-      "Description": "List of Availability Zones to use for the subnets in the VPC. This MUST match the number of AvailabilityZones. Please use 3 AvailabilityZones for the production system.",
-      "Type": "List<AWS::EC2::AvailabilityZone::Name>"
     },
-    "NumberOfAZs": {
-      "AllowedValues": [
-        "2",
-        "3"
-      ],
-      "Description": "Number of Availability Zones to use in the VPC. This MUST match your selections in the list of Availability Zones parameter. Please use 3 AZs for the production system.",
-      "Default": "3",
-      "Type": "String"
-    },
-    "VPCCIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "Default": "10.0.0.0/16",
-      "Type": "String",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Description": "CIDR Block for the VPC"
-    },
-    "PrivateSubnet1CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.0.0/19",
-      "Description": "CIDR block for private subnet 1 located in Availability Zone 1.",
-      "Type": "String"
-    },
-    "PrivateSubnet2CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.32.0/19",
-      "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
-      "Type": "String"
-    },
-    "PrivateSubnet3CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.64.0/19",
-      "Description": "CIDR block for private subnet 2 located in Availability Zone 2.",
-      "Type": "String"
-    },
-    "PublicSubnet1CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.128.0/20",
-      "Description": "CIDR Block for the public DMZ subnet 1 located in Availability Zone 1",
-      "Type": "String"
-    },
-    "PublicSubnet2CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.144.0/20",
-      "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
-      "Type": "String"
-    },
-    "PublicSubnet3CIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/(1[6-9]|2[0-8]))$",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
-      "Default": "10.0.160.0/20",
-      "Description": "CIDR Block for the public DMZ subnet 2 located in Availability Zone 2",
-      "Type": "String"
-    },
-    "RemoteAccessCIDR": {
-      "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
-      "Type": "String",
-      "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/x",
-      "Description": "Allowed CIDR block for external SSH access to the Bastion nodes. MUST be in the form x.x.x.x/x"
-    },
-
-    "KeyPairName":{
-      "Type":"AWS::EC2::KeyPair::KeyName",
-      "Description":"Name of an existing EC2 KeyPair to enable SSH access to the Bastion and cluster nodes."
-    },
-
-    "BastionAMIOS": {
-      "AllowedValues": [
-        "Amazon-Linux-HVM",
-        "CentOS-7-HVM",
-        "Ubuntu-Server-14.04-LTS-HVM",
-        "Ubuntu-Server-16.04-LTS-HVM"
-      ],
-      "Default": "Amazon-Linux-HVM",
-      "Description": "The Linux distribution for the AMI to be used for the bastion instances",
-      "Type": "String"
-    },
-    "BastionInstanceType": {
-        "Default": "t2.micro",
-        "Type": "String",
-        "Description": "Amazon EC2 instance type for the second bastion instance",
-        "AllowedValues": [
-            "t2.nano",
-            "t2.micro",
-            "t2.small",
-            "t2.medium",
-            "t2.large",
-            "m3.large",
-            "m3.xlarge",
-            "m3.2xlarge",
-            "m4.large",
-            "m4.xlarge",
-            "m4.2xlarge",
-            "m4.4xlarge"
-        ]
-    },
-    "NumBastionHosts": {
-      "AllowedValues": [
-        "1",
-        "2",
-        "3",
-        "4"
-      ],
-      "Default": "2",
-      "Description": "Enter the number of bastion hosts to create",
-      "Type": "String"
-    },
-
-    "ClusterName":{
-      "Type":"String",
-      "Description":"Name of the ECS cluster. The cluster domain will be ClusterName-firecamp.com. Each label of the domain name can be up to 63 bytes long. The ClusterName can be up to 54 bytes.",
-      "MinLength": "1",
-      "MaxLength": "54",
-      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9-]*",
-      "ConstraintDescription": "Cluster name must start with a letter and can only contain letters, numbers, or hyphens."
-    },
-    "NumberOfNodes":{
-      "Type":"Number",
-      "Default":"3",
-      "Description":"Number of Nodes. This MUST match the total number of Apache Cassandra replicas."
-    },
-    "NodeAMIOS": {
-      "AllowedValues": [
-        "Amazon-Linux-HVM"
-      ],
-      "Default": "Amazon-Linux-HVM",
-      "Description": "The Linux distribution for the AMI to be used for the service instances",
-      "Type": "String"
-    },
-    "NodeInstanceType":{
-      "Description":"EC2 instance type",
-      "Type":"String",
-      "Default":"m4.2xlarge",
-      "AllowedValues":[
-        "t2.micro",
-        "t2.small",
-        "t2.medium",
-        "t2.large",
-        "t2.xlarge",
-        "t2.2xlarge",
-        "m3.medium",
-        "m3.large",
-        "m3.xlarge",
-        "m3.2xlarge",
-        "m4.large",
-        "m4.xlarge",
-        "m4.2xlarge",
-        "m4.4xlarge",
-        "m4.10xlarge",
-        "r3.large",
-        "r3.xlarge",
-        "r3.2xlarge",
-        "r3.4xlarge",
-        "r3.8xlarge",
-        "r4.large",
-        "r4.xlarge",
-        "r4.2xlarge",
-        "r4.4xlarge",
-        "r4.8xlarge",
-        "r4.16xlarge",
-        "c4.large",
-        "c4.xlarge",
-        "c4.2xlarge",
-        "c4.4xlarge",
-        "c4.8xlarge",
-        "c5.large",
-        "c5.xlarge",
-        "c5.2xlarge",
-        "c5.4xlarge",
-        "c5.9xlarge",
-        "c5.18xlarge"
-      ],
-      "ConstraintDescription":"Please choose a valid instance type."
-    },
-    "DeleteVolume": {
-      "Type": "String",
-      "Default": "false",
-      "AllowedValues": [
-        "true",
-        "false"
-      ],
-      "Description": "Whether delete Apache Cassandra EBS volumes when deleting the stack"
-    },
-
-    "CassandraRelease": {
-      "Type": "String",
-      "Default": "3.11",
-      "AllowedValues": [
-        "3.11"
-      ],
-      "Description": "Apache Cassandra Release Version. For the detail release notes, please refer to http://cassandra.apache.org"
-    },
-    "ServiceName": {
-      "Type": "String",
-      "Description": "The Apache Cassandra Service Name. The service DNS name will be ServiceName-index.ClusterName-firecamp.com. Each label of the domain name can be up to 63 bytes long. Reserve 4 bytes for the index. The ServiceName can be up to 58 bytes.",
-      "MinLength": "1",
-      "MaxLength": "58",
-      "AllowedPattern": "[a-zA-Z][a-zA-Z0-9-]*",
-      "ConstraintDescription": "Service name must start with a letter and can only contain letters, numbers, or hyphens."
-    },
-    "Replicas": {
-      "Type": "Number",
-      "Default": "3",
-      "Description": "Number of replicas"
-    },
-    "HeapSizeMB": {
-      "Type": "Number",
-      "Default": "8192",
-      "Description": "The Apache Cassandra JVM Heap Size MB"
-    },
-    "VolumeType": {
-      "Type": "String",
-      "Default": "gp2",
-      "AllowedValues": [
-        "gp2",
-        "io1",
-        "st1"
-      ],
-      "Description": "The Data volume type"
-    },
-    "Iops": {
-      "Type": "Number",
-      "Default": 100,
-      "Description": "The iops of the data volume, valid for io1 type volume only."
-    },
-    "VolumeSizeGB": {
-      "Type": "Number",
-      "Default": "400",
-      "Description": "The Data volume size"
-    },
-    "EncryptVolume": {
-      "Type": "String",
-      "Default": "false",
-      "AllowedValues": [
-        "false",
-        "true"
-      ],
-      "Description": "Whether encrypts the Data volume"
-    },
-    "JournalVolumeType": {
-      "Type": "String",
-      "Default": "gp2",
-      "AllowedValues": [
-        "gp2",
-        "io1",
-        "st1"
-      ],
-      "Description": "The Journal volume type"
-    },
-    "JournalIops": {
-      "Type": "Number",
-      "Default": 100,
-      "Description": "The iops of the journal volume, valid for io1 type volume only."
-    },
-    "JournalVolumeSizeGB": {
-      "Type": "Number",
-      "Default": "20",
-      "Description": "The Journal volume size"
-    },
-    "EncryptJournalVolume": {
-      "Type": "String",
-      "Default": "false",
-      "AllowedValues": [
-        "false",
-        "true"
-      ],
-      "Description": "Whether encrypts the Journal volume"
-    },
-    "JmxRemoteUser": {
-      "Type": "String",
-      "Default": "jmxuser",
-      "MaxLength": "255",
-      "Description": "The Apache Cassandra JMX Remote User"
-    },
-    "JmxRemotePassword": {
-      "Type": "String",
-      "Default": "jmxpassword",
-      "NoEcho": "true",
-      "MaxLength": "255",
-      "Description": "Enter your Apache Cassandra JMX Remote Password, default: jmxpassword",
-      "ConstraintDescription": "Input your Apache Cassandra JMX Remote Password"
-    },
-
-    "FireCampRelease": {
-      "Type": "String",
-      "Default": "0.9.4",
-      "AllowedValues": [ "0.9.4", "0.9.3" ],
-      "Description": "The FireCamp release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
-    },
-    "QSS3BucketName": {
-      "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
-      "Default": "quickstart-reference",
-      "Type": "String",
-      "ConstraintDescription": "The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).",
-      "Description": "S3 bucket name for the Quick Start assets. The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
-    },
-    "QSS3KeyPrefix": {
-      "AllowedPattern": "^[0-9a-zA-Z-/]*$",
-      "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
-      "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
-      "Default": "cloudstax/cassandra/latest/",
-      "Type": "String"
-    }
-  },
-  "Conditions": {
-    "2AZCondition": {
-      "Fn::Equals": [
-        {
-          "Ref": "NumberOfAZs"
-        },
-        2
-      ]
-    },
-    "GovCloudCondition": {
-      "Fn::Equals": [
-        {
-          "Ref": "AWS::Region"
-        },
-        "us-gov-west-1"
-      ]
-    }
-  },
-  "Resources":{
-    "VPCStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template",
-            {
-              "QSS3Region": {
-                "Fn::If": [
-                 "GovCloudCondition",
-                 "s3-us-gov-west-1",
-                 "s3"
-                ]
-              }
-            }
-          ]
-        },
-        "Parameters": {
-          "AvailabilityZones": {
-            "Fn::Join": [
-              ",",
-              {
-                "Ref": "AvailabilityZones"
-              }
+    "Conditions": {
+        "2AZCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "NumberOfAZs"
+                },
+                2
             ]
-          },
-          "KeyPairName": {
-            "Ref": "KeyPairName"
-          },
-          "NumberOfAZs": {
-            "Ref": "NumberOfAZs"
-          },
-          "PrivateSubnet1ACIDR": {
-            "Ref": "PrivateSubnet1CIDR"
-          },
-          "PrivateSubnet2ACIDR": {
-            "Ref": "PrivateSubnet2CIDR"
-          },
-          "PrivateSubnet3ACIDR": {
-            "Ref": "PrivateSubnet3CIDR"
-          },
-          "PublicSubnet1CIDR": {
-            "Ref": "PublicSubnet1CIDR"
-          },
-          "PublicSubnet2CIDR": {
-            "Ref": "PublicSubnet2CIDR"
-          },
-          "PublicSubnet3CIDR": {
-            "Ref": "PublicSubnet3CIDR"
-          },
-          "VPCCIDR": {
-            "Ref": "VPCCIDR"
-          }
+        },
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
         }
-      }
     },
-    "BastionStack": {
-      "DependsOn": "VPCStack",
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-linux-bastion/templates/linux-bastion.template",
-            {
-              "QSS3Region": {
-                "Fn::If": [
-                 "GovCloudCondition",
-                 "s3-us-gov-west-1",
-                 "s3"
-                ]
-              }
+    "Resources": {
+        "VPCStack": {
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "AvailabilityZones": {
+                        "Fn::Join": [
+                            ",",
+                            {
+                                "Ref": "AvailabilityZones"
+                            }
+                        ]
+                    },
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "NumberOfAZs": {
+                        "Ref": "NumberOfAZs"
+                    },
+                    "PrivateSubnet1ACIDR": {
+                        "Ref": "PrivateSubnet1CIDR"
+                    },
+                    "PrivateSubnet2ACIDR": {
+                        "Ref": "PrivateSubnet2CIDR"
+                    },
+                    "PrivateSubnet3ACIDR": {
+                        "Ref": "PrivateSubnet3CIDR"
+                    },
+                    "PublicSubnet1CIDR": {
+                        "Ref": "PublicSubnet1CIDR"
+                    },
+                    "PublicSubnet2CIDR": {
+                        "Ref": "PublicSubnet2CIDR"
+                    },
+                    "PublicSubnet3CIDR": {
+                        "Ref": "PublicSubnet3CIDR"
+                    },
+                    "VPCCIDR": {
+                        "Ref": "VPCCIDR"
+                    }
+                }
             }
-          ]
         },
-        "Parameters": {
-          "BastionInstanceType": {
-            "Ref": "BastionInstanceType"
-          },
-          "NumBastionHosts": {
-            "Ref": "NumBastionHosts"
-          },
-          "BastionAMIOS": {
-            "Ref": "BastionAMIOS"
-          },
-          "EnableTCPForwarding": "true",
-          "KeyPairName": {
-            "Ref": "KeyPairName"
-          },
-          "PublicSubnet1ID": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.PublicSubnet1ID"
-            ]
-          },
-          "PublicSubnet2ID": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.PublicSubnet2ID"
-            ]
-          },
-          "QSS3BucketName": {
-            "Ref": "QSS3BucketName"
-          },
-          "QSS3KeyPrefix": {
-            "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-linux-bastion/"
-          },
-          "RemoteAccessCIDR": {
-            "Ref": "RemoteAccessCIDR"
-          },
-          "VPCID": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.VPCID"
-            ]
-          }
+        "BastionStack": {
+            "DependsOn": "VPCStack",
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-linux-bastion/templates/linux-bastion.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "BastionInstanceType": {
+                        "Ref": "BastionInstanceType"
+                    },
+                    "NumBastionHosts": {
+                        "Ref": "NumBastionHosts"
+                    },
+                    "BastionAMIOS": {
+                        "Ref": "BastionAMIOS"
+                    },
+                    "EnableTCPForwarding": "true",
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "PublicSubnet1ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet1ID"
+                        ]
+                    },
+                    "PublicSubnet2ID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.PublicSubnet2ID"
+                        ]
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-linux-bastion/"
+                    },
+                    "RemoteAccessCIDR": {
+                        "Ref": "RemoteAccessCIDR"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
+                        ]
+                    }
+                }
+            }
+        },
+        "CassandraAccessSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Fn::GetAtt": [
+                        "VPCStack",
+                        "Outputs.VPCID"
+                    ]
+                },
+                "GroupDescription": "Application instances with access to the Apache Cassandra service"
+            }
+        },
+        "ServiceSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Fn::GetAtt": [
+                        "VPCStack",
+                        "Outputs.VPCID"
+                    ]
+                },
+                "GroupDescription": "The access ports to the services in cluster",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "22",
+                        "ToPort": "22",
+                        "SourceSecurityGroupId": {
+                            "Fn::GetAtt": [
+                                "BastionStack",
+                                "Outputs.BastionSecurityGroupID"
+                            ]
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9042",
+                        "ToPort": "9042",
+                        "SourceSecurityGroupId": {
+                            "Ref": "CassandraAccessSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7199",
+                        "ToPort": "7199",
+                        "SourceSecurityGroupId": {
+                            "Ref": "CassandraAccessSecurityGroup"
+                        }
+                    }
+                ]
+            }
+        },
+        "InternalAccessSecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "VpcId": {
+                    "Fn::GetAtt": [
+                        "VPCStack",
+                        "Outputs.VPCID"
+                    ]
+                },
+                "GroupDescription": "The inter-server access ports in cluster",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "27040",
+                        "ToPort": "27040",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7000",
+                        "ToPort": "7000",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7001",
+                        "ToPort": "7001",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "7199",
+                        "ToPort": "7199",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9042",
+                        "ToPort": "9042",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "9160",
+                        "ToPort": "9160",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    }
+                ]
+            }
+        },
+        "FireCampStack": {
+            "DependsOn": "BastionStack",
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp-common.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "ClusterName": {
+                        "Ref": "ClusterName"
+                    },
+                    "Release": {
+                        "Ref": "FireCampRelease"
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/"
+                    },
+                    "ServiceSecurityGroupID": {
+                        "Ref": "ServiceSecurityGroup"
+                    },
+                    "InternalAccessSecurityGroupID": {
+                        "Ref": "InternalAccessSecurityGroup"
+                    },
+                    "KeyPairName": {
+                        "Ref": "KeyPairName"
+                    },
+                    "VPCID": {
+                        "Fn::GetAtt": [
+                            "VPCStack",
+                            "Outputs.VPCID"
+                        ]
+                    },
+                    "SubnetIDs": {
+                        "Fn::If": [
+                            "2AZCondition",
+                            {
+                                "Fn::Join": [
+                                    ",",
+                                    [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet1AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet2AID"
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            },
+                            {
+                                "Fn::Join": [
+                                    ",",
+                                    [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet1AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet2AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet3AID"
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            }
+                        ]
+                    },
+                    "AvailabilityZones": {
+                        "Fn::Join": [
+                            ",",
+                            {
+                                "Ref": "AvailabilityZones"
+                            }
+                        ]
+                    },
+                    "NumberOfNodes": {
+                        "Ref": "NumberOfNodes"
+                    },
+                    "NodeAMIOS": {
+                        "Ref": "NodeAMIOS"
+                    },
+                    "NodeInstanceType": {
+                        "Ref": "NodeInstanceType"
+                    }
+                }
+            }
+        },
+        "CassandraStack": {
+            "DependsOn": "FireCampStack",
+            "Type": "AWS::CloudFormation::Stack",
+            "Properties": {
+                "TemplateURL": {
+                    "Fn::Sub": [
+                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/db-lambda.template",
+                        {
+                            "QSS3Region": {
+                                "Fn::If": [
+                                    "GovCloudCondition",
+                                    "s3-us-gov-west-1",
+                                    "s3"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "Parameters": {
+                    "DeleteVolume": {
+                        "Ref": "DeleteVolume"
+                    },
+                    "ClusterName": {
+                        "Ref": "ClusterName"
+                    },
+                    "ServiceName": {
+                        "Ref": "ServiceName"
+                    },
+                    "Replicas": {
+                        "Ref": "Replicas"
+                    },
+                    "HeapSizeMB": {
+                        "Ref": "HeapSizeMB"
+                    },
+                    "VolumeType": {
+                        "Ref": "VolumeType"
+                    },
+                    "Iops": {
+                        "Ref": "Iops"
+                    },
+                    "VolumeSizeGB": {
+                        "Ref": "VolumeSizeGB"
+                    },
+                    "EncryptVolume": {
+                        "Ref": "EncryptVolume"
+                    },
+                    "JournalVolumeType": {
+                        "Ref": "JournalVolumeType"
+                    },
+                    "JournalIops": {
+                        "Ref": "JournalIops"
+                    },
+                    "JournalVolumeSizeGB": {
+                        "Ref": "JournalVolumeSizeGB"
+                    },
+                    "EncryptJournalVolume": {
+                        "Ref": "EncryptJournalVolume"
+                    },
+                    "JmxRemoteUser": {
+                        "Ref": "JmxRemoteUser"
+                    },
+                    "JmxRemotePassword": {
+                        "Ref": "JmxRemotePassword"
+                    },
+                    "QSS3BucketName": {
+                        "Ref": "QSS3BucketName"
+                    },
+                    "QSS3KeyPrefix": {
+                        "Ref": "QSS3KeyPrefix"
+                    },
+                    "ServiceSecurityGroupID": {
+                        "Ref": "ServiceSecurityGroup"
+                    },
+                    "SubnetIDs": {
+                        "Fn::If": [
+                            "2AZCondition",
+                            {
+                                "Fn::Join": [
+                                    ",",
+                                    [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet1AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet2AID"
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            },
+                            {
+                                "Fn::Join": [
+                                    ",",
+                                    [
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet1AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet2AID"
+                                            ]
+                                        },
+                                        {
+                                            "Fn::GetAtt": [
+                                                "VPCStack",
+                                                "Outputs.PrivateSubnet3AID"
+                                            ]
+                                        }
+                                    ]
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
         }
-      }
     },
-
-    "CassandraAccessSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "VpcId": {
-          "Fn::GetAtt": [
-            "VPCStack",
-            "Outputs.VPCID"
-          ]
-        },
-        "GroupDescription": "Application instances with access to the Apache Cassandra service"
-      }
-    },
-    "ServiceSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "VpcId": {
-          "Fn::GetAtt": [
-            "VPCStack",
-            "Outputs.VPCID"
-          ]
-        },
-        "GroupDescription": "The access ports to the services in cluster",
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "22",
-            "ToPort": "22",
-            "SourceSecurityGroupId": {
-              "Fn::GetAtt": [
-                "BastionStack",
-                "Outputs.BastionSecurityGroupID"
-              ]
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "9042",
-            "ToPort": "9042",
-            "SourceSecurityGroupId": {
-              "Ref": "CassandraAccessSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "7199",
-            "ToPort": "7199",
-            "SourceSecurityGroupId": {
-              "Ref": "CassandraAccessSecurityGroup"
-            }
-          }
-        ]
-      }
-    },
-    "InternalAccessSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "VpcId": {
-          "Fn::GetAtt": [
-            "VPCStack",
-            "Outputs.VPCID"
-          ]
-        },
-        "GroupDescription": "The inter-server access ports in cluster",
-        "SecurityGroupIngress": [
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "27040",
-            "ToPort": "27040",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "7000",
-            "ToPort": "7000",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "7001",
-            "ToPort": "7001",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "7199",
-            "ToPort": "7199",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "9042",
-            "ToPort": "9042",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          },
-          {
-            "IpProtocol": "tcp",
-            "FromPort": "9160",
-            "ToPort": "9160",
-            "SourceSecurityGroupId": {
-              "Ref": "ServiceSecurityGroup"
-            }
-          }
-        ]
-      }
-    },
-
-    "FireCampStack": {
-      "DependsOn": "BastionStack",
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/templates/firecamp-common.template",
-            {
-              "QSS3Region": {
-                "Fn::If": [
-                  "GovCloudCondition",
-                  "s3-us-gov-west-1",
-                  "s3"
+    "Outputs": {
+        "VPCID": {
+            "Value": {
+                "Fn::GetAtt": [
+                    "VPCStack",
+                    "Outputs.VPCID"
                 ]
-              }
             }
-          ]
         },
-        "Parameters": {
-          "ClusterName": {
-            "Ref": "ClusterName"
-          },
-          "Release": {
-            "Ref": "FireCampRelease"
-          },
-          "QSS3BucketName": {
-            "Ref": "QSS3BucketName"
-          },
-          "QSS3KeyPrefix": {
-            "Fn::Sub": "${QSS3KeyPrefix}submodules/quickstart-cloudstax-firecamp/"
-          },
-          "ServiceSecurityGroupID": {
-            "Ref": "ServiceSecurityGroup"
-          },
-          "InternalAccessSecurityGroupID": {
-            "Ref": "InternalAccessSecurityGroup"
-          },
-          "KeyPairName": {
-            "Ref": "KeyPairName"
-          },
-          "VPCID": {
-            "Fn::GetAtt": [
-              "VPCStack",
-              "Outputs.VPCID"
-            ]
-          },
-          "SubnetIDs": {
-            "Fn::If": [
-              "2AZCondition",
-              "Fn::Join": [
-                ",",
-                [
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet1AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet2AID"
-                  ]
-                ]
-              ],
-              "Fn::Join": [
-                ",",
-                [
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet1AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet2AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet3AID"
-                  ]
-                ]
-              ]
-            ]
-          },
-          "AvailabilityZones": {
-            "Fn::Join": [
-              ",",
-              {
-                "Ref": "AvailabilityZones"
-              }
-            ]
-          },
-          "NumberOfNodes": {
-            "Ref": "NumberOfNodes"
-          },
-          "NodeAMIOS": {
-            "Ref": "NodeAMIOS"
-          },
-          "NodeInstanceType": {
-            "Ref": "NodeInstanceType"
-          }
+        "CassandraAccessSecurityGroup": {
+            "Value": {
+                "Ref": "CassandraAccessSecurityGroup"
+            }
         }
-      }
-    },
-
-    "CassandraStack": {
-      "DependsOn": "FireCampStack",
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": {
-          "Fn::Sub": [
-            "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}templates/db-lambda.template",
-            {
-              "QSS3Region": {
-                "Fn::If": [
-                  "GovCloudCondition",
-                  "s3-us-gov-west-1",
-                  "s3"
-                ]
-              }
-            }
-          ]
-        },
-        "Parameters": {
-          "DeleteVolume": {
-            "Ref": "DeleteVolume"
-          },
-          "ClusterName": {
-            "Ref": "ClusterName"
-          },
-          "ServiceName": {
-            "Ref": "ServiceName"
-          },
-          "Replicas": {
-            "Ref": "Replicas"
-          },
-          "HeapSizeMB": {
-            "Ref": "HeapSizeMB"
-          },
-          "VolumeType": {
-            "Ref": "VolumeType"
-          },
-          "Iops": {
-            "Ref": "Iops"
-          },
-          "VolumeSizeGB": {
-            "Ref": "VolumeSizeGB"
-          },
-          "EncryptVolume": {
-            "Ref": "EncryptVolume"
-          },
-          "JournalVolumeType": {
-            "Ref": "JournalVolumeType"
-          },
-          "JournalIops": {
-            "Ref": "JournalIops"
-          },
-          "JournalVolumeSizeGB": {
-            "Ref": "JournalVolumeSizeGB"
-          },
-          "EncryptJournalVolume": {
-            "Ref": "EncryptJournalVolume"
-          },
-          "JmxRemoteUser": {
-            "Ref": "JmxRemoteUser"
-          },
-          "JmxRemotePassword": {
-            "Ref": "JmxRemotePassword"
-          },
-
-          "QSS3BucketName": {
-            "Ref": "QSS3BucketName"
-          },
-          "QSS3KeyPrefix": {
-            "Ref": "QSS3KeyPrefix"
-          },
-          "ServiceSecurityGroupID": {
-            "Ref": "ServiceSecurityGroup"
-          },
-          "SubnetIDs": {
-            "Fn::If": [
-              "2AZCondition",
-              "Fn::Join": [
-                ",",
-                [
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet1AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet2AID"
-                  ]
-                ]
-              ],
-              "Fn::Join": [
-                ",",
-                [
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet1AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet2AID"
-                  ],
-                  "Fn::GetAtt": [
-                    "VPCStack",
-                    "Outputs.PrivateSubnet3AID"
-                  ]
-                ]
-              ]
-            ]
-          }
-        }
-      }
     }
-  },
-  "Outputs":{
-    "VPCID": {
-      "Value":{
-        "Fn::GetAtt": [
-          "VPCStack",
-          "Outputs.VPCID"
-        ]
-      }
-    },
-    "CassandraAccessSecurityGroup":{
-      "Value":{
-        "Ref": "CassandraAccessSecurityGroup"
-      }
-    }
-  }
 }
