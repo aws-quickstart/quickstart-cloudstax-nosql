@@ -42,5 +42,13 @@
   {
     "ParameterKey": "HeapSizeMB",
     "ParameterValue": "512"
+  },
+  {
+    "ParameterKey": "QSS3BucketName",
+    "ParameterValue": "$[taskcat_autobucket]"
+  },
+  {
+    "ParameterKey": "QSS3KeyPrefix",
+    "ParameterValue": "quickstart-cloudstax-nosql/"
   }
 ]
