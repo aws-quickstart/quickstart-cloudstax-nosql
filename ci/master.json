@@ -5,7 +5,7 @@
   },
   {
     "ParameterKey": "ClusterName",
-    "ParameterValue": "alfred-develop-$[alfred_genuuid]"
+    "ParameterValue": "$[taskcat_random-string]"
   },
   {
     "ParameterKey": "AvailabilityZones",
@@ -42,5 +42,9 @@
   {
     "ParameterKey": "HeapSizeMB",
     "ParameterValue": "512"
+  },
+  {
+    "ParameterKey": "QSS3BucketName",
+    "ParameterValue": "$[taskcat_autobucket]"
   }
 ]

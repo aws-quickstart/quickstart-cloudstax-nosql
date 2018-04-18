@@ -21,6 +21,6 @@ global:
 tests:
   cloudstax-nosql:
     template_file:  db-master.template
-    parameter_input: taskcat-master.json
+    parameter_input: master.json
     regions:
       - us-west-2
