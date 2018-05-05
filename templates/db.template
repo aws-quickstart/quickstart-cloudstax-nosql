@@ -42,15 +42,6 @@
                 },
                 {
                     "Label": {
-                        "default": "AWS Quick Start Configuration"
-                    },
-                    "Parameters": [
-                        "QSS3BucketName",
-                        "QSS3KeyPrefix"
-                    ]
-                },
-                {
-                    "Label": {
                         "default": "Apache Cassandra Service Configuration"
                     },
                     "Parameters": [
@@ -68,6 +59,15 @@
                         "EncryptJournalVolume",
                         "JmxRemoteUser",
                         "JmxRemotePassword"
+                    ]
+                },
+                {
+                    "Label": {
+                        "default": "AWS Quick Start Configuration"
+                    },
+                    "Parameters": [
+                        "QSS3BucketName",
+                        "QSS3KeyPrefix"
                     ]
                 }
             ],
@@ -140,7 +140,7 @@
                     "default": "Apache Cassandra JVM Heap Size MB"
                 },
                 "VolumeType": {
-                    "default": "Data Volume Type"
+                    "default": "Cassandra Data Volume Type"
                 },
                 "Iops": {
                     "default": "Data Volume Iops"
@@ -149,10 +149,10 @@
                     "default": "Data Volume Size GB"
                 },
                 "EncryptVolume": {
-                    "default": "Whether encrypts Data Volume"
+                    "default": "Encrypt Data Volume"
                 },
                 "JournalVolumeType": {
-                    "default": "Journal Volume Type"
+                    "default": "Cassandra Journal Volume Type"
                 },
                 "JournalIops": {
                     "default": "Journal Volume Iops"
@@ -161,7 +161,7 @@
                     "default": "Journal Volume Size GB"
                 },
                 "EncryptJournalVolume": {
-                    "default": "Whether encrypts Journal Volume"
+                    "default": "Encrypt Journal Volume"
                 },
                 "JmxRemoteUser": {
                     "default": "JMX Remote User"
@@ -351,7 +351,7 @@
                 "io1",
                 "st1"
             ],
-            "Description": "The Data volume type"
+            "Description": "The Cassandra Data volume type"
         },
         "Iops": {
             "Type": "Number",
@@ -370,7 +370,7 @@
                 "false",
                 "true"
             ],
-            "Description": "Whether encrypts the Data volume"
+            "Description": "Encrypt the Data volume"
         },
         "JournalVolumeType": {
             "Type": "String",
@@ -380,7 +380,7 @@
                 "io1",
                 "st1"
             ],
-            "Description": "The Journal volume type"
+            "Description": "The Cassandra Journal volume type"
         },
         "JournalIops": {
             "Type": "Number",
@@ -399,7 +399,7 @@
                 "false",
                 "true"
             ],
-            "Description": "Whether encrypts the Journal volume"
+            "Description": "Encrypt the Journal volume"
         },
         "JmxRemoteUser": {
             "Type": "String",
