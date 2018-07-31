@@ -1,18 +1,23 @@
-# CloudStax NoSQL DB for Cassandra on the AWS Cloud
+# quickstart-cloudstax-nosql
+## CloudStax NoSQL DB for Apache Casssandra on the AWS Cloud
 
-This Quick Start deploys CloudStax NoSQL DB for Cassandra into an AWS Cloud configuration of your choice.
+This Quick Start automatically deploys CloudStax NoSQL DB for Apache Cassandra into a highly available architecture on AWS, using Amazon Elastic Container Service (Amazon ECS) for container orchestration and CloudStax FireCamp for stateful service management.
 
-CloudStax NoSQL DB is a NoSQL DB for [Apache Cassandra](http://cassandra.apache.org/) that makes it easy to set up, manage, and scale Apache Cassandra on AWS. Apache Cassandra is a master less peer-to-peer distributed system. Apache Cassandra is designed to handle large amounts of data across many commodity servers, providing high availability with no single point of failure. CloudStax NoSQL DB for Cassandra removes the complexity associated with deploying and managing Apache Cassandra. It provides a high-performance, highly scalable, and cost-effective NoSQL database that you can use to manage large amounts of data.
+CloudStax NoSQL DB for Cassandra removes the complexity associated with deploying and managing Apache Cassandra. It provides a high-performance, highly scalable, and cost-effective NoSQL database that you can use to manage large amounts of data.
 
-CloudStax NoSQL DB runs Apache Cassandra in a container on AWS. This deployment uses Amazon ECS for container orchestration and [CloudStax FireCamp](https://github.com/cloudstax/firecamp) for stateful service management. Each Cassandra container has one Amazon EBS volume for the commit log and one EBS volume for data. Each Cassandra container also has a unique DNS name, so an application can simply access Cassandra by using the DNS name.
+Deploying CloudStax NoSQL DB on AWS helps enhance the reliability of using Cassandra for your production deployments. This Quick Start uses multiple Availability Zones for high availability, automatic failure detection, and recovery of Cassandra nodes, and helps provide enhanced security and isolation for Cassandra.
 
-Deploying CloudStax NoSQL DB on AWS enhances the reliability of using Cassandra for your production deployments. The benefits of running CloudStax NoSQL DB for Cassandra on AWS include the following:
+The Quick Start offers two deployment options:
 
-* Cassandra nodes are deployed across multiple Availability Zones for high availability.
-* The Multi-AZ environment on AWS provides automatic failure detection and recovery. If one Cassandra node fails, the AWS Auto Scaling group starts a new node, and the container service (Amazon ECS) automatically starts the service container. FireCamp attaches the original EBS volumes and update the DNS record. The failover involves no data copy and is seamless to the application.
-* AWS helps provide enhanced security and isolation for Cassandra.
+- Deploying CloudStax NoSQL DB into a new virtual private cloud (VPC) on AWS
+- Deploying CloudStax NoSQL DB into an existing VPC on AWS
 
-The AWS CloudFormation templates included with the Quick Start automate the following:
+You can also use the AWS CloudFormation templates as a starting point for your own implementation.
 
-- Deploying Cassandra into a new VPC
-- Deploying Cassandra into an existing VPC
+![Quick Start architecture for CloudStax NoSQL DB on AWS](https://d0.awsstatic.com/partner-network/QuickStart/datasheets/cloudstax-nosql-db-for-apache-cassandra-architecture-on-aws.png)
+
+For architectural details, best practices, step-by-step instructions, and customization options, see the 
+[deployment guide](https://fwd.aws/n7n7Q).
+
+To post feedback, submit feature ideas, or report bugs, use the **Issues** section of this GitHub repo.
+If you'd like to submit code for this Quick Start, please review the [AWS Quick Start Contributor's Kit](https://aws-quickstart.github.io/). 
