@@ -46,6 +46,7 @@
                     "Parameters": [
                         "ClusterName",
                         "FireCampRelease",
+                        "FireCampCatalogRelease",
                         "NumberOfNodes",
                         "NodeAMIOS",
                         "NodeInstanceType",
@@ -130,7 +131,10 @@
                     "default": "Cluster Name"
                 },
                 "FireCampRelease": {
-                    "default": "CloudStax FireCamp Release Version"
+                    "default": "CloudStax FireCamp System Services Release Version"
+                },
+                "FireCampCatalogRelease": {
+                    "default": "CloudStax FireCamp Catalog Service Release Version"
                 },
                 "NumberOfNodes": {
                     "default": "Number of Container Worker Nodes"
@@ -484,12 +488,15 @@
         },
         "FireCampRelease": {
             "Type": "String",
-            "Default": "0.9.6",
-            "AllowedValues": [
-                "0.9.6",
-                "0.9.5"
-            ],
-            "Description": "The FireCamp release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
+            "Default": "1.0",
+            "AllowedValues": [ "1.0" ],
+            "Description": "The FireCamp System Services release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
+        },
+        "FireCampCatalogRelease": {
+            "Type": "String",
+            "Default": "1.0",
+            "AllowedValues": [ "1.0" ],
+            "Description": "The FireCamp Catalog Service release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
         },
         "QSS3BucketName": {
             "AllowedPattern": "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$",
@@ -782,6 +789,9 @@
                     },
                     "Release": {
                         "Ref": "FireCampRelease"
+                    },
+                    "CatalogRelease": {
+                        "Ref": "FireCampCatalogRelease"
                     },
                     "QSS3BucketName": {
                         "Ref": "QSS3BucketName"
