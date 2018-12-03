@@ -101,11 +101,11 @@ def lambda_handler(event, context):
 
             url = 'http://' + manageserver + ':27040/?Catalog-Check-Service-Init'
             initdata = {
-                "ServiceType": "cassandra",
                 "Service": {
                     "Region": properties['Region'],
                     "Cluster": properties['Cluster'],
-                    "ServiceName": properties['ServiceName']
+                    "ServiceName": properties['ServiceName'],
+                    "CatalogServiceType": "cassandra"
                 },
             }
 
@@ -138,7 +138,8 @@ def lambda_handler(event, context):
                 "Service": {
                     "Region": properties['Region'],
                     "Cluster": properties['Cluster'],
-                    "ServiceName": properties['ServiceName']
+                    "ServiceName": properties['ServiceName'],
+                    "CatalogServiceType": "cassandra"
                 }
             }
 

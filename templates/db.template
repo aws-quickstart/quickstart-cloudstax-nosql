@@ -514,6 +514,14 @@
                     },
                     {
                         "IpProtocol": "tcp",
+                        "FromPort": "27041",
+                        "ToPort": "27041",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
                         "FromPort": "7000",
                         "ToPort": "7000",
                         "SourceSecurityGroupId": {
