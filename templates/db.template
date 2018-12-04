@@ -34,6 +34,7 @@
                     "Parameters": [
                         "ClusterName",
                         "FireCampRelease",
+                        "FireCampCatalogRelease",
                         "NodeAMIOS",
                         "NumberOfNodes",
                         "NodeInstanceType",
@@ -105,7 +106,10 @@
                     "default": "Cluster Name"
                 },
                 "FireCampRelease": {
-                    "default": "CloudStax FireCamp Release Version"
+                    "default": "CloudStax FireCamp System Services Release Version"
+                },
+                "FireCampCatalogRelease": {
+                    "default": "CloudStax FireCamp Catalog Service Release Version"
                 },
                 "NodeAMIOS": {
                     "default": "Node AMI Type"
@@ -234,12 +238,17 @@
             "Default": "quickstart-cloudstax-nosql/",
             "Type": "String"
         },
-
         "FireCampRelease": {
             "Type": "String",
-            "Default": "0.9.6",
-            "AllowedValues": [ "0.9.6", "0.9.5" ],
-            "Description": "The FireCamp release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
+            "Default": "1.0",
+            "AllowedValues": [ "1.0" ],
+            "Description": "The FireCamp System Services release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
+        },
+        "FireCampCatalogRelease": {
+            "Type": "String",
+            "Default": "1.0",
+            "AllowedValues": [ "1.0" ],
+            "Description": "The FireCamp Catalog Service release version. For the detail release notes, please refer to https://github.com/cloudstax/firecamp/releases."
         },
         "ClusterName":{
             "Type":"String",
@@ -505,6 +514,14 @@
                     },
                     {
                         "IpProtocol": "tcp",
+                        "FromPort": "27041",
+                        "ToPort": "27041",
+                        "SourceSecurityGroupId": {
+                            "Ref": "ServiceSecurityGroup"
+                        }
+                    },
+                    {
+                        "IpProtocol": "tcp",
                         "FromPort": "7000",
                         "ToPort": "7000",
                         "SourceSecurityGroupId": {
@@ -570,6 +587,9 @@
                     },
                     "Release": {
                         "Ref": "FireCampRelease"
+                    },
+                    "CatalogRelease": {
+                        "Ref": "FireCampCatalogRelease"
                     },
                     "QSS3BucketName": {
                         "Ref": "QSS3BucketName"
