@@ -1,6 +1,7 @@
 global:
   qsname: quickstart-cloudstax-nosql
   owner: quickstart-eng@amazon.com
+  package-lambda: true
   reporting: true
   regions:
     - ap-northeast-1

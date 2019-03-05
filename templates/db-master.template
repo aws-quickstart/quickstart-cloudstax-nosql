@@ -589,7 +589,6 @@
             }
         },
         "BastionStack": {
-            "DependsOn": "VPCStack",
             "Type": "AWS::CloudFormation::Stack",
             "Properties": {
                 "TemplateURL": {
@@ -675,8 +674,8 @@
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "22",
-                        "ToPort": "22",
+                        "FromPort": 22,
+                        "ToPort": 22,
                         "SourceSecurityGroupId": {
                             "Fn::GetAtt": [
                                 "BastionStack",
@@ -686,16 +685,16 @@
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "9042",
-                        "ToPort": "9042",
+                        "FromPort": 9042,
+                        "ToPort": 9042,
                         "SourceSecurityGroupId": {
                             "Ref": "CassandraAccessSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "7199",
-                        "ToPort": "7199",
+                        "FromPort": 7199,
+                        "ToPort": 7199,
                         "SourceSecurityGroupId": {
                             "Ref": "CassandraAccessSecurityGroup"
                         }
@@ -716,56 +715,56 @@
                 "SecurityGroupIngress": [
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "27040",
-                        "ToPort": "27040",
+                        "FromPort": 27040,
+                        "ToPort": 27040,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "27041",
-                        "ToPort": "27041",
+                        "FromPort": 27041,
+                        "ToPort": 27041,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "7000",
-                        "ToPort": "7000",
+                        "FromPort": 7000,
+                        "ToPort": 7000,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "7001",
-                        "ToPort": "7001",
+                        "FromPort": 7001,
+                        "ToPort": 7001,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "7199",
-                        "ToPort": "7199",
+                        "FromPort": 7199,
+                        "ToPort": 7199,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "9042",
-                        "ToPort": "9042",
+                        "FromPort": 9042,
+                        "ToPort": 9042,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
                     },
                     {
                         "IpProtocol": "tcp",
-                        "FromPort": "9160",
-                        "ToPort": "9160",
+                        "FromPort": 9160,
+                        "ToPort": 9160,
                         "SourceSecurityGroupId": {
                             "Ref": "ServiceSecurityGroup"
                         }
